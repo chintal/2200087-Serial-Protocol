@@ -1,3 +1,44 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+# Copyright (C) 2015 Chintalagiri Shashank
+# Copyright (C) 2014, 2015 David Dworken
+#
+# This file is based on David Dworken's implementation at
+# https://github.com/ddworken/2200087-Serial-Protocol
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Serial Decoder for RadioShack 2200087 Multimeter
+
+This module provides functions for decoding the serial protocol of the
+RadioShack 2200087 Mulitimeter. See the included `README.md`_ for the
+protocol specifications and standalone usage instructions for the script.
+
+The documentation in this file focuses on the usage of this file as a
+module.
+
+Note that the folder name, '2200087-Serial-Protocol', is not an allowed
+module name for python modules. As such, if you intend to use this as a
+module, you should rename it to something else. The suggested name is
+'driver2200087'. This can be done by providing the new name during the
+git clone, i.e.,
+
+    git clone https://github.com/chintal/2200087-Serial-Protocol.git driver2200087
+
+"""
+
 import numpy as np
 import subprocess
 import serial
@@ -6,6 +47,10 @@ import sys
 
 
 class Grapher(object):
+    """
+    Grapher used to plot a graph of the data when used in standalone mode. When used as a
+    module, you can probably just ignore it and use your own graphing mechanism, if any.
+    """
     np = __import__('numpy')
     subprocess = __import__('subprocess')
     graphOutput = []                # a list of strings to store the graph in
@@ -68,8 +113,14 @@ class Grapher(object):
         self.update(self.x, self.y, label)
 
 
-# converts serial data to an array of strings each of which is a binary representation of a single byte
 def get_arr_from_str(serial_data):
+    """
+        Converts serial data to an array of strings each of which is a
+        binary representation of a single byte
+
+        :param serial_data: Series of bytes received over the serial line, separated by spaces
+        :returns list of ascii representations for each character in the serial data
+    """
     output = []
     input_list = serial_data.split(" ")
     for value in input_list:
@@ -83,6 +134,18 @@ def get_arr_from_str(serial_data):
 
 
 def process_digit(digit_number, bin_array):
+    """
+        Extracts a single digit from the binary array, at the location specified by
+        `digit_number`, and returns it's numeric value as well as whether a decimal
+         point is to be included.
+
+        :param digit_number : Location from which digit should be extracted (4, 3, 2, 1)
+        :param bin_array: Array of binary representations of serial data
+        :rtype tuple
+        :return decimal_point_bool : Boolean, whether decimal point is to be included at
+                                     the specified location
+        :return digit_value : Number value of the digit at the specified location
+    """
     binn = []
     if digit_number == 4:
         binn.append(bin_array[2][::-1])  # reverse it because we want to start with bit 0, not bit 7
@@ -115,7 +178,13 @@ def process_digit(digit_number, bin_array):
     return decimal_point_bool, digit_value
 
 
-def get_char_from_digit_dict(digit_dict):  # Returns a char based off of the digitDictionary sent to it
+def get_char_from_digit_dict(digit_dict):
+    """
+        Converts a digit_dict into the character it represents.
+
+        :param digit_dict : dictionary containing the digit's information
+        :rtype int or char
+    """
     if is_9(digit_dict):
         return 9
     if is_8(digit_dict):
@@ -149,7 +218,8 @@ def get_char_from_digit_dict(digit_dict):  # Returns a char based off of the dig
     if is_l(digit_dict):
         return 'L'
 
-# All of these is*(digitDict) methods are essentially implementing a
+
+# All of these is_*(digitDict) methods are essentially implementing a
 # bitmask to convert a series of bits into characters or numbers
 # While this is a horrible format, it works and is unlikely to be
 # changed as switching to a more traditional bitmask is not that advantageous
@@ -267,8 +337,14 @@ def is_0(digit_dict):
     return False
 
 
-# Checks all possible flags that might be needed and returns a list containing all currently active flags
 def str_to_flags(str_of_bytes):
+    """
+        Checks all possible flags that might be needed and returns a list containing all currently active flags
+
+        :param str_of_bytes : a string of bytes
+        :rtype list
+        :returns list of flags, each of which is a string
+    """
     flags = []
     bin_array = get_arr_from_str(str_of_bytes)
     for index, binStr in enumerate(bin_array):
@@ -323,8 +399,14 @@ def str_to_flags(str_of_bytes):
     return flags
 
 
-# converts a string of space separated hexadecimal bytes into numbers following the protocol in readme.md
 def str_to_digits(str_of_bytes):
+    """
+        Converts a string of space separated hexadecimal bytes into numbers following the protocol in readme.md
+
+        :param str_of_bytes : a string of bytes
+        :rtype str
+        :returns string of digits represented by str_of_bytes, with decimal point as applicable
+    """
     bin_array = get_arr_from_str(str_of_bytes)  # Create an array of the binary values from those hexadecimal bytes
     digits = ""
     # reversed range so that we iterate through values 4,3,2,1 in that order
@@ -344,7 +426,31 @@ def str_to_digits(str_of_bytes):
     return digits
 
 
+def get_serial_chunk(ser):
+    """
+        Gets a serial chunk from the device.
+
+        :param ser : serial.Serial object
+        :rtype str
+        :returns string of 14 received characters, separated by spaces.
+    """
+    while True:
+        chunk = []
+        for i in range(14):
+            chunk.append(ser.read(1).encode('hex'))
+        if chunk[0][0] != '1':
+            for index, byte in enumerate(chunk):
+                if byte[0] == '1':
+                    start_chunk = chunk[index:]
+                    end_chunk = chunk[:index]
+                    chunk = start_chunk + end_chunk
+        return " ".join(chunk)
+
+
 def main_loop(vargs):
+    """
+        Main loop for standalone use
+    """
     if len(vargs.port) == 1:
         ser = serial.Serial(port=vargs.port[0], baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
                             xonxoff=False, rtscts=False, dsrdtr=False)
@@ -426,20 +532,6 @@ def main_loop(vargs):
                     if not vargs.csv:
                         sys.stdout.write(" | ")
                 sys.stdout.write("\n")
-
-
-def get_serial_chunk(ser):
-    while True:
-        chunk = []
-        for i in range(14):
-            chunk.append(ser.read(1).encode('hex'))
-        if chunk[0][0] != '1':
-            for index, byte in enumerate(chunk):
-                if byte[0] == '1':
-                    start_chunk = chunk[index:]
-                    end_chunk = chunk[:index]
-                    chunk = start_chunk + end_chunk
-        return " ".join(chunk)
 
 
 if __name__ == '__main__':  # Allows for usage of above methods in a library
