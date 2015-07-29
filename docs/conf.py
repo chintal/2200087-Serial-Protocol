@@ -20,6 +20,11 @@ import os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../'))
 
+autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'show-inheritance']
+autodoc_member_order = 'bysource'
+autoclass_content = 'init'
+
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
