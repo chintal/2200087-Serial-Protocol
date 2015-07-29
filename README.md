@@ -1,6 +1,10 @@
 #2200087-Serial-Protocol
 
-The 2200087 is an inexpensive DMM sold at radioshack. It supports logging and graphing data on a computer, but the supplied code only supports Windows. This is a python script to allow for connecting to the multimeter over USB on Linux or Mac OSX. Due to radioshack not supplying any serial specifications, the below protocol was reverse engineered from simply observing the output of the DMM. 
+The 2200087 is an inexpensive DMM sold at radioshack. It supports logging and 
+graphing data on a computer, but the supplied code only supports Windows. This 
+is a python script to allow for connecting to the multimeter over USB on Linux 
+or Mac OSX. Due to radioshack not supplying any serial specifications, the below 
+protocol was reverse engineered from simply observing the output of the DMM. 
 
 #Installation and Usage
 
@@ -34,13 +38,15 @@ then run:
 sudo python serialDecoder.py -p /dev/ttyUSB0 --graph
 ```
 
-You also can read from multiple multimeters at the same time and get a CSV output like so:
+You also can read from multiple multimeters at the same time and get a 
+CSV output like so:
 
 ``` bash
 sudo python serialDecoder.py -p /dev/ttyUSB0 /dev/ttyUSB1
 ```
 
-If you only want the actual values and not information about what mode the multimeter is on, use the -q flag:
+If you only want the actual values and not information about what mode 
+the multimeter is on, use the -q flag:
 
 ``` bash
 sudo python serialDecoder.py -p /dev/ttyUSB0 -q
@@ -65,7 +71,9 @@ sudo python serialDecoder.py -p /dev/ttyUSB0 -q
 | Byte 13 | 1     | 1     | 1     | 1     | Farads     | Amps     | Volts     | m (1e-3) | 
 | Byte 14 | 1     | 1     | 1     | 0     | Hz         | Ohms     | K (1e3)   | M (1e6)  | 
 
-All bytes are sent over in hexadecimal numbered one through fourteen. Bytes 3-4 contain digit 4, bytes 5-6 contain digit 3 and so on. All other parts of the display are turned on as shown in the above table. 
+All bytes are sent over in hexadecimal numbered one through fourteen. Bytes 3-4 
+contain digit 4, bytes 5-6 contain digit 3 and so on. All other parts of the 
+display are turned on as shown in the above table. 
 
 ![Number](https://cloud.githubusercontent.com/assets/5304541/6250379/6ab9de40-b75b-11e4-9444-c7d69e58e5ff.png)
 ![Display](https://cloud.githubusercontent.com/assets/5304541/6250469/03216f4a-b75c-11e4-92eb-9b6d7568b3a8.png)
