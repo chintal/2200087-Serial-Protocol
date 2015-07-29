@@ -33,7 +33,7 @@ Note that the folder name, '2200087-Serial-Protocol', is not an allowed
 module name for python modules. As such, if you intend to use this as a
 module, you should rename it to something else. The suggested name is
 'driver2200087'. This can be done by providing the new name during the
-git clone, i.e.,
+git clone, i.e.::
 
     git clone https://github.com/chintal/2200087-Serial-Protocol.git driver2200087
 
@@ -115,13 +115,14 @@ class Grapher(object):
 
 def get_arr_from_str(serial_data):
     """
-        Converts serial data to an array of strings each of which is a
-        binary representation of a single byte
+    Converts serial data to an array of strings each of which is a
+    binary representation of a single byte
 
-        :param serial_data: Series of bytes received over the serial line, separated by spaces
-        :type serial_data: str
-        :return list of ascii representations for each character in the serial data
-        :rtype list
+    :param serial_data: Series of bytes received over the serial line, separated by spaces
+    :type serial_data: str
+    :returns: list of ascii representations for each character in the serial data
+    :rtype: list
+
     """
     output = []
     input_list = serial_data.split(" ")
@@ -137,18 +138,18 @@ def get_arr_from_str(serial_data):
 
 def process_digit(digit_number, bin_array):
     """
-        Extracts a single digit from the binary array, at the location specified by
-        `digit_number`, and returns it's numeric value as well as whether a decimal
-         point is to be included.
+    Extracts a single digit from the binary array, at the location specified by
+    `digit_number`, and returns it's numeric value as well as whether a decimal
+    point is to be included.
 
-        :param digit_number: Location from which digit should be extracted (4, 3, 2, 1)
-        :type digit_number: int
-        :param bin_array: Array of binary representations of serial data
-        :type bin_array: list
-        :rtype tuple
-        :return decimal_point_bool : Boolean, whether decimal point is to be included at
-                                     the specified location
-        :return digit_value : Number value of the digit at the specified location
+    :param digit_number: Location from which digit should be extracted (4, 3, 2, 1)
+    :type digit_number: int
+    :param bin_array: Array of binary representations of serial data
+    :type bin_array: list
+    :rtype: tuple
+    :returns decimal_point_bool: Boolean if decimal point is to be included at the specified location
+    :returns digit_value: Number value of the digit at the specified location
+
     """
     binn = []
     if digit_number == 4:
@@ -184,12 +185,13 @@ def process_digit(digit_number, bin_array):
 
 def get_char_from_digit_dict(digit_dict):
     """
-        Converts a digit_dict into the character it represents.
+    Converts a digit_dict into the character it represents.
 
-        :param digit_dict: dictionary containing the digit's information
-        :type digit_dict: dict
-        :return The character represented by digit_dict
-        :rtype int or char
+    :param digit_dict: dictionary containing the digit's information
+    :type digit_dict: dict
+    :returns: The character represented by digit_dict
+    :rtype: int or char
+
     """
     if is_9(digit_dict):
         return 9
@@ -345,12 +347,13 @@ def is_0(digit_dict):
 
 def str_to_flags(str_of_bytes):
     """
-        Checks all possible flags that might be needed and returns a list containing all currently active flags
+    Checks all possible flags that might be needed and returns a list containing all currently active flags
 
-        :param str_of_bytes: a string of bytes
-        :type str_of_bytes: str
-        :return list of flags, each of which is a string
-        :rtype list
+    :param str_of_bytes: a string of bytes
+    :type str_of_bytes: str
+    :returns: list of flags, each of which is a string
+    :rtype: list
+
     """
     flags = []
     bin_array = get_arr_from_str(str_of_bytes)
@@ -408,12 +411,13 @@ def str_to_flags(str_of_bytes):
 
 def str_to_digits(str_of_bytes):
     """
-        Converts a string of space separated hexadecimal bytes into numbers following the protocol in readme.md
+    Converts a string of space separated hexadecimal bytes into numbers following the protocol in readme.md
 
-        :param str_of_bytes: a string of bytes
-        :type str_of_bytes: str
-        :rtype str
-        :return string of digits represented by str_of_bytes with decimal point as applicable
+    :param str_of_bytes: a string of bytes
+    :type str_of_bytes: str
+    :rtype: str
+    :return: string of digits represented by str_of_bytes with decimal point as applicable
+
     """
     bin_array = get_arr_from_str(str_of_bytes)  # Create an array of the binary values from those hexadecimal bytes
     digits = ""
@@ -436,11 +440,12 @@ def str_to_digits(str_of_bytes):
 
 def get_serial_chunk(ser):
     """
-        Gets a serial chunk from the device.
+    Gets a serial chunk from the device.
 
-        :param ser : serial.Serial object
-        :rtype str
-        :return string of 14 received characters separated by spaces
+    :param ser: serial.Serial object
+    :rtype: str
+    :returns: string of 14 received characters separated by spaces
+
     """
     while True:
         chunk = []
@@ -457,16 +462,17 @@ def get_serial_chunk(ser):
 
 def get_next_point(ser):
     """
-        Get the next point from the device. This function raises an Exception if anything at all
-        goes wrong during the process of obtaining the value. The returned value is a string which
-        should then be parsed by downstream code to determine what it actually is.
+    Get the next point from the device. This function raises an Exception if anything at all
+    goes wrong during the process of obtaining the value. The returned value is a string which
+    should then be parsed by downstream code to determine what it actually is.
 
-        Due to the nature of the serial interface, the downstream code must also ensure that this
-        function is called often enough to keep the data in the various serial buffers from going
-        stale. This particular DMM sends back a point every 0.1s, so this function should effectively
-        be called at that frequency.
+    Due to the nature of the serial interface, the downstream code must also ensure that this
+    function is called often enough to keep the data in the various serial buffers from going
+    stale. This particular DMM sends back a point every 0.1s, so this function should effectively
+    be called at that frequency.
 
-        ..warning:: This function will block.
+    ..warning:: This function will block.
+
     """
     chunk = get_serial_chunk(ser)
     digits = str_to_digits(chunk)
@@ -479,9 +485,9 @@ def get_next_point(ser):
 
 def confirm_device(ser):
     """
-        Test the serial object for the device. This is a naive test, assuming that if a value can
-        be successfully parsed, the device is what is expected. This is a very weak test, and should
-        not be overly relied upon.
+    Test the serial object for the device. This is a naive test, assuming that if a value can
+    be successfully parsed, the device is what is expected. This is a very weak test, and should
+    not be overly relied upon.
     """
     # noinspection PyBroadException
     try:
@@ -493,8 +499,8 @@ def confirm_device(ser):
 
 def get_serial_object(port='/dev/ttyUSB0'):
     """
-        Get a serial object given the port. The object is also confirmed to be for the correct
-        device by the implementation in confirm_device.
+    Get a serial object given the port. The object is also confirmed to be for the correct
+    device by the implementation in confirm_device.
     """
     ser = serial.Serial(port=port, baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
                         xonxoff=False, rtscts=False, dsrdtr=False)
@@ -506,7 +512,7 @@ def get_serial_object(port='/dev/ttyUSB0'):
 
 def main_loop(vargs):
     """
-        Main loop for standalone use
+    Main loop for standalone use
     """
     if len(vargs.port) == 1:
         ser = serial.Serial(port=vargs.port[0], baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
