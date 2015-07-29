@@ -447,6 +447,55 @@ def get_serial_chunk(ser):
         return " ".join(chunk)
 
 
+def get_next_point(ser):
+    """
+        Get the next point from the device. This function raises an Exception if anything at all
+        goes wrong during the process of obtaining the value. The returned value is a string which
+        should then be parsed by downstream code to determine what it actually is.
+
+        Due to the nature of the serial interface, the downstream code must also ensure that this
+        function is called often enough to keep the data in the various serial buffers from going
+        stale. This particular DMM sends back a point every 0.1s, so this function should effectively
+        be called at that frequency.
+
+        :warning: This function will block.
+    """
+    chunk = get_serial_chunk(ser)
+    digits = str_to_digits(chunk)
+    flags = ' '.join(str_to_flags(chunk))
+    if "None" not in digits:
+        return digits + ' ' + flags
+    else:
+        raise Exception
+
+
+def confirm_device(ser):
+    """
+        Test the serial object for the device. This is a naive test, assuming that if a value can
+        be successfully parsed, the device is what is expected. This is a very weak test, and should
+        not be overly relied upon.
+    """
+    # noinspection PyBroadException
+    try:
+        get_next_point(ser)
+        return True
+    except:
+        return True
+
+
+def get_serial_object(port='/dev/ttyUSB0'):
+    """
+        Get a serial object given the port. The object is also confirmed to be for the correct
+        device by the implementation in confirm_device.
+    """
+    ser = serial.Serial(port=port, baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
+                        xonxoff=False, rtscts=False, dsrdtr=False)
+    if confirm_device(ser):
+        return ser
+    else:
+        raise Exception
+
+
 def main_loop(vargs):
     """
         Main loop for standalone use
