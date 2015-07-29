@@ -1,11 +1,15 @@
 2200087 Serial Protocol and Standalone Usage
-============================================
+############################################
 
 The 2200087 is an inexpensive DMM sold at radioshack. It supports logging and 
 graphing data on a computer, but the supplied code only supports Windows. This 
 is a python script to allow for connecting to the multimeter over USB on Linux 
 or Mac OSX. Due to radioshack not supplying any serial specifications, the below 
-protocol was reverse engineered from simply observing the output of the DMM. 
+protocol was reverse engineered from simply observing the output of the DMM.
+ 
+This package and script, and much of the readme file herein, is essentially a 
+slightly tweaked version of the script written and maintained by David Dworken, 
+available at `https://github.com/ddworken/2200087-Serial-Protocol.git`_. 
 
 Installation and Usage
 ======================
@@ -81,7 +85,8 @@ Protocol Description
 
 All bytes are sent over in hexadecimal numbered one through fourteen. Bytes 3-4 
 contain digit 4, bytes 5-6 contain digit 3 and so on. All other parts of the 
-display are turned on as shown in the above table. 
+display are turned on as shown in the above table. The multimeter sends the data 
+at a rate of 10 Hz. 
 
-![Number](https://cloud.githubusercontent.com/assets/5304541/6250379/6ab9de40-b75b-11e4-9444-c7d69e58e5ff.png)
-![Display](https://cloud.githubusercontent.com/assets/5304541/6250469/03216f4a-b75c-11e4-92eb-9b6d7568b3a8.png)
+.. image:: https://cloud.githubusercontent.com/assets/5304541/6250379/6ab9de40-b75b-11e4-9444-c7d69e58e5ff.png
+.. image:: https://cloud.githubusercontent.com/assets/5304541/6250469/03216f4a-b75c-11e4-92eb-9b6d7568b3a8.png
