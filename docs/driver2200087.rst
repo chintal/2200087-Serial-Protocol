@@ -1,9 +1,6 @@
 driver2200087 package
 =====================
 
-Submodules
-----------
-
 driver2200087.serialDecoder module
 ----------------------------------
 
@@ -12,11 +9,3 @@ driver2200087.serialDecoder module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: driver2200087
-    :members:
-    :undoc-members:
-    :show-inheritance:
