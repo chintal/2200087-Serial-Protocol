@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'driver2200087'
-copyright = u'2015, Author'
+copyright = u'2015, Chintalagiri Shashank'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -200,7 +200,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'driver2200087.tex', u'driver2200087 Documentation',
-   u'Author', 'manual'),
+   u'Chintalagiri Shashank', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -230,7 +230,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'driver2200087', u'driver2200087 Documentation',
-     [u'Author'], 1)
+     [u'Chintalagiri Shashank'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -244,7 +244,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'driver2200087', u'driver2200087 Documentation',
-   u'Author', 'driver2200087', 'One line description of project.',
+   u'Chintalagiri Shashank', 'driver2200087', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -265,9 +265,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = u'driver2200087'
-epub_author = u'Author'
-epub_publisher = u'Author'
-epub_copyright = u'2015, Author'
+epub_author = u'Chintalagiri Shashank'
+epub_publisher = u'ReadTheDocs'
+epub_copyright = u'2015, Chintalagiri Shashank'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'driver2200087'
