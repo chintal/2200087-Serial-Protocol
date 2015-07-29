@@ -9,7 +9,7 @@ protocol was reverse engineered from simply observing the output of the DMM.
  
 This package and script, and much of the readme file herein, is essentially a 
 slightly tweaked version of the script written and maintained by David Dworken, 
-available at `https://github.com/ddworken/2200087-Serial-Protocol.git`_. 
+available at https://github.com/ddworken/2200087-Serial-Protocol.git  
 
 Installation and Usage
 ======================
