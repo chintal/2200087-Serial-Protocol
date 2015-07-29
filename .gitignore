@@ -2,4 +2,4 @@
 *.pyc
 *~
 
-doc/_build
+docs/_build
