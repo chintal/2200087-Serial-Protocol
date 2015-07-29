@@ -471,7 +471,7 @@ def get_next_point(ser):
     stale. This particular DMM sends back a point every 0.1s, so this function should effectively
     be called at that frequency.
 
-    ..warning:: This function will block.
+    .. warning:: This function will block.
 
     """
     chunk = get_serial_chunk(ser)
