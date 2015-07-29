@@ -23,7 +23,7 @@
 """Serial Decoder for RadioShack 2200087 Multimeter
 
 This module provides functions for decoding the serial protocol of the
-RadioShack 2200087 Mulitimeter. See the included `README.md`_ for the
+RadioShack 2200087 Mulitimeter. See the included `README.md` for the
 protocol specifications and standalone usage instructions for the script.
 
 The documentation in this file focuses on the usage of this file as a
@@ -119,7 +119,9 @@ def get_arr_from_str(serial_data):
         binary representation of a single byte
 
         :param serial_data: Series of bytes received over the serial line, separated by spaces
-        :returns list of ascii representations for each character in the serial data
+        :type serial_data: str
+        :return list of ascii representations for each character in the serial data
+        :rtype list
     """
     output = []
     input_list = serial_data.split(" ")
@@ -139,8 +141,10 @@ def process_digit(digit_number, bin_array):
         `digit_number`, and returns it's numeric value as well as whether a decimal
          point is to be included.
 
-        :param digit_number : Location from which digit should be extracted (4, 3, 2, 1)
+        :param digit_number: Location from which digit should be extracted (4, 3, 2, 1)
+        :type digit_number: int
         :param bin_array: Array of binary representations of serial data
+        :type bin_array: list
         :rtype tuple
         :return decimal_point_bool : Boolean, whether decimal point is to be included at
                                      the specified location
@@ -182,7 +186,9 @@ def get_char_from_digit_dict(digit_dict):
     """
         Converts a digit_dict into the character it represents.
 
-        :param digit_dict : dictionary containing the digit's information
+        :param digit_dict: dictionary containing the digit's information
+        :type digit_dict: dict
+        :return The character represented by digit_dict
         :rtype int or char
     """
     if is_9(digit_dict):
@@ -341,9 +347,10 @@ def str_to_flags(str_of_bytes):
     """
         Checks all possible flags that might be needed and returns a list containing all currently active flags
 
-        :param str_of_bytes : a string of bytes
+        :param str_of_bytes: a string of bytes
+        :type str_of_bytes: str
+        :return list of flags, each of which is a string
         :rtype list
-        :returns list of flags, each of which is a string
     """
     flags = []
     bin_array = get_arr_from_str(str_of_bytes)
@@ -403,9 +410,10 @@ def str_to_digits(str_of_bytes):
     """
         Converts a string of space separated hexadecimal bytes into numbers following the protocol in readme.md
 
-        :param str_of_bytes : a string of bytes
+        :param str_of_bytes: a string of bytes
+        :type str_of_bytes: str
         :rtype str
-        :returns string of digits represented by str_of_bytes, with decimal point as applicable
+        :return string of digits represented by str_of_bytes with decimal point as applicable
     """
     bin_array = get_arr_from_str(str_of_bytes)  # Create an array of the binary values from those hexadecimal bytes
     digits = ""
@@ -432,7 +440,7 @@ def get_serial_chunk(ser):
 
         :param ser : serial.Serial object
         :rtype str
-        :returns string of 14 received characters, separated by spaces.
+        :return string of 14 received characters separated by spaces
     """
     while True:
         chunk = []
@@ -458,7 +466,7 @@ def get_next_point(ser):
         stale. This particular DMM sends back a point every 0.1s, so this function should effectively
         be called at that frequency.
 
-        :warning: This function will block.
+        ..warning:: This function will block.
     """
     chunk = get_serial_chunk(ser)
     digits = str_to_digits(chunk)
