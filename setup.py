@@ -14,7 +14,7 @@ def read(fname):
 
 setup(
     name="driver2200087",
-    version="0.3",
+    version="0.4",
     author="Chintalagiri Shashank",
     author_email="shashank@chintal.in",
     description="Python Package to interface with Radio Shack's 2200087 Multimeter",

@@ -89,6 +89,7 @@ class InstProtocol2200087(Protocol):
         self.point_buffer = deque(maxlen=self._point_buffer_size)
         self._serial_port = port
         self._serial_transport = None
+        self._frame_processor = process_chunk
 
     def make_serial_connection(self):
         """
@@ -150,7 +151,7 @@ class InstProtocol2200087(Protocol):
 
     def frame_received(self, frame):
         """
-        This function is called by data_recieved when a full frame is received
+        This function is called by data_received when a full frame is received
         by the serial transport and the protocol.
 
         This function recasts the frame into the format used by the serialDecoder
@@ -166,7 +167,7 @@ class InstProtocol2200087(Protocol):
         """
         frame = [byte.encode('hex') for byte in frame]
         chunk = ' '.join(frame)
-        point = process_chunk(chunk)
+        point = self._frame_processor(chunk)
         self.point_buffer.append(point)
 
     def latest_point(self, flush=True):
