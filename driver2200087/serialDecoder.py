@@ -460,6 +460,15 @@ def get_serial_chunk(ser):
         return " ".join(chunk)
 
 
+def process_chunk(chunk):
+    digits = str_to_digits(chunk)
+    flags = ' '.join(str_to_flags(chunk))
+    if "None" not in digits:
+        return digits + ' ' + flags
+    else:
+        return None
+
+
 def get_next_point(ser):
     """
     Get the next point from the device. This function raises an Exception if anything at all
@@ -471,16 +480,15 @@ def get_next_point(ser):
     stale. This particular DMM sends back a point every 0.1s, so this function should effectively
     be called at that frequency.
 
+    Alternatively, a crochet / twisted based protocol implementation can be used to provide an
+    interface friendlier to more complex synchronous code without needing to create a plethora
+    of threads that spend their time in time.sleep().
+
     .. warning:: This function will block.
 
     """
     chunk = get_serial_chunk(ser)
-    digits = str_to_digits(chunk)
-    flags = ' '.join(str_to_flags(chunk))
-    if "None" not in digits:
-        return digits + ' ' + flags
-    else:
-        raise Exception
+    return process_chunk(chunk)
 
 
 def confirm_device(ser):
