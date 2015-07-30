@@ -1,18 +1,6 @@
-2200087 Serial Protocol and Standalone Usage
-############################################
 
-The 2200087 is an inexpensive DMM sold at radioshack. It supports logging and
-graphing data on a computer, but the supplied code only supports Windows. This
-is a python script to allow for connecting to the multimeter over USB on Linux
-or Mac OSX. Due to radioshack not supplying any serial specifications, the below
-protocol was reverse engineered from simply observing the output of the DMM.
-
-The serialDecoder module and much of the readme file herein, is essentially a
-slightly tweaked version of the script written and maintained by David Dworken,
-available at https://github.com/ddworken/2200087-Serial-Protocol.git
-
-Installation and Usage
-======================
+Standalone Usage
+================
 
 Start by cloning this repository::
 
@@ -48,8 +36,8 @@ the multimeter is on, use the -q flag::
 
     sudo python serialDecoder.py -p /dev/ttyUSB0 -q
 
-Protocol Description
-====================
+2200087 Serial Protocol Description
+===================================
 
 +---------+-------+-------+-------+-------+------------+----------+-----------+----------+
 |         | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3      | Bit 2    | Bit 1     | Bit 0    |

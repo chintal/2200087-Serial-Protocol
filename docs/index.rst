@@ -5,13 +5,14 @@
 
 Welcome to driver2200087's documentation!
 =========================================
+.. include:: ../README.rst
 
 Contents:
 
 .. toctree::
    :maxdepth: 4
 
-   ../README
+
    basic
    driver2200087
 

@@ -97,7 +97,7 @@ You can install it as usual, with::
 
     python setup.py install
 
-The latest version of the documentation can be found at `ReadTheDocs<http://driver2200087.readthedocs.org/en/latest/index.html>`_.
+The latest version of the documentation can be found at `ReadTheDocs <http://driver2200087.readthedocs.org/en/latest/index.html>`_.
 
 License
 -------
