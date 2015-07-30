@@ -38,8 +38,6 @@ from twisted.internet.serialport import SerialPort
 from serialDecoder import process_chunk
 
 from crochet import setup
-setup()
-
 from crochet import run_in_reactor
 from crochet import wait_for
 
@@ -68,8 +66,7 @@ class InstProtocol2200087(Protocol):
     This is a twisted protocol which handles serial communications with
     2200087 multimeters. This protocol exists and operates within the context
     of a twisted reactor. Applications themselves built on twisted should be
-    able to simply import this protocol (or its factory) - though the crochet
-    setup() in the module may need to be bypassed. Synchronous / non-twisted
+    able to simply import this protocol (or its factory). Synchronous / non-twisted
     applications should use the InstInterface2200087 class instead.
 
     :param port: Port on which the device is connected. Default '/dev/ttyUSB0'.
@@ -105,7 +102,7 @@ class InstProtocol2200087(Protocol):
         This function is called by twisted when a connection to the serial
         transport is successfully opened.
         """
-        print "Connection Made to Device"
+        pass
 
     def connectionLost(self, reason=connectionDone):
         """
@@ -235,8 +232,7 @@ class InstFactory2200087(Factory):
 
     This protocol factory exists and operates within the context of a twisted
     reactor. Applications themselves built on twisted should be able to
-    simply import this protocol factory - though the crochet setup() in the
-    module may need to be bypassed. Synchronous / non-twisted applications
+    simply import this protocol factory. Synchronous / non-twisted applications
     should use the InstInterface2200087 class instead.
     """
     def __init__(self):
@@ -272,6 +268,17 @@ class InstInterface2200087(object):
 
     :param port: Port on which the device is connected. Default '/dev/ttyUSB0'.
     :type port: str
+
+    Your application code is expected to setup crochet before creating the
+    instance. A short example :
+
+    >>> from crochet import setup
+    >>> setup()
+    >>> from driver2200087.runner import InstInterface2200087
+    >>> dmm = InstInterface2200087('/dev/ttyUSB0')
+    >>> dmm.connect()
+    >>> print dmm.latest_point()
+
     """
     def __init__(self, port='/dev/ttyUSB0'):
         self._port = port
@@ -348,6 +355,7 @@ class InstInterface2200087(object):
 
 
 if __name__ == '__main__':
+    setup()
     dmm = InstInterface2200087()
     dmm.connect()
     while True:

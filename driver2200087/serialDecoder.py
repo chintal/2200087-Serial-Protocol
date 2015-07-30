@@ -28,15 +28,6 @@ protocol specifications and standalone usage instructions for the script.
 
 The documentation in this file focuses on the usage of this file as a
 module.
-
-Note that the folder name, '2200087-Serial-Protocol', is not an allowed
-module name for python modules. As such, if you intend to use this as a
-module, you should rename it to something else. The suggested name is
-'driver2200087'. This can be done by providing the new name during the
-git clone, i.e.::
-
-    git clone https://github.com/chintal/2200087-Serial-Protocol.git driver2200087
-
 """
 
 import numpy as np

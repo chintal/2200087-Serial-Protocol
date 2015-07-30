@@ -87,7 +87,7 @@ Or using easy_install (python 2.7 only):
 
 The simplest way to obtain the source for this package is to clone the git repository.
 
-    git clone https://github.com/chintal/2200087-Serial-Protocol.git driver2200087
+    git clone https://github.com/chintal/driver2200087.git driver2200087
     
 You can install it as usual, with 
 

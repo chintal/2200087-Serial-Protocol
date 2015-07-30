@@ -16,7 +16,7 @@ Installation and Usage
 
 Start by cloning this repository::
 
-    git clone https://github.com/chintal/2200087-Serial-Protocol.git
+    git clone https://github.com/chintal/driver2200087.git driver2200087
 
 or the original by David Dworken::
 
