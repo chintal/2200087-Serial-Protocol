@@ -65,7 +65,7 @@ def unwrap_failures(err):
 
 class InstProtocol2200087(Protocol):
     """
-    This is a twisted protocol which handles serial communications with the
+    This is a twisted protocol which handles serial communications with
     2200087 multimeters. This protocol exists and operates within the context
     of a twisted reactor. Applications themselves built on twisted should be
     able to simply import this protocol (or its factory) - though the crochet
@@ -127,8 +127,8 @@ class InstProtocol2200087(Protocol):
 
         This function also performs the initial frame synchronization by
         dumping any bytes in the beginning of the buffer which aren't the
-        first byte of the frame. In it's steady state, the protocol framing
-        buffer will always have the beginning of a frame at the first element.
+        first byte of the frame. In its steady state, the protocol framing
+        buffer will always have the beginning of a frame as the first element.
 
         :param data: The data bytes received
         :type data: str
@@ -147,11 +147,11 @@ class InstProtocol2200087(Protocol):
         by the serial transport and the protocol.
 
         This function recasts the frame into the format used by the serialDecoder
-        and then used that module to process the frame into the final string. This
-        string is appended to the protocol's point buffer.
+        and then uses that module to process the frame into the final string. This
+        string is then appended to the protocol's point buffer.
 
         This string is treated as a fully processed datapoint for the purposes
-        of this file.
+        of this module.
 
         :param frame: The full frame representing a single data point
         :type frame: str
@@ -174,7 +174,7 @@ class InstProtocol2200087(Protocol):
         protocol buffer, which can be determined using data_available().
 
         This is a twisted protocol function, and should not be called directly
-        by synchronous / non-twisted code. Instead, it's counterpart in the
+        by synchronous / non-twisted code. Instead, its counterpart in the
         InstInterface object should be used.
 
         :param flush: Whether to flush all the older data points.
@@ -200,7 +200,7 @@ class InstProtocol2200087(Protocol):
         protocol buffer, which can be determined using data_available().
 
         This is a twisted protocol function, and should not be called directly
-        by synchronous / non-twisted code. Instead, it's counterpart in the
+        by synchronous / non-twisted code. Instead, its counterpart in the
         InstInterface object should be used.
 
         :return: Next Data Point in the point buffer as processed by the serialDecoder
@@ -215,7 +215,7 @@ class InstProtocol2200087(Protocol):
         the protocol's point buffer.
 
         This is a twisted protocol function, and should not be called directly
-        by synchronous / non-twisted code. Instead, it's counterpart in the
+        by synchronous / non-twisted code. Instead, its counterpart in the
         InstInterface object should be used.
 
         :return: Number of points waiting in the protocol's point buffer
@@ -227,8 +227,8 @@ class InstProtocol2200087(Protocol):
 
 class InstFactory2200087(Factory):
     """
-    This is a twisted protocol factory which produces twisted protocol object
-    which handle serial communications with the 2200087 multimeters. This class
+    This is a twisted protocol factory which produces twisted protocol objects
+    which handle serial communications with 2200087 multimeters. This class
     is typically not to be instantiated by application code. This module includes
     a single instance of this class (factory), which can be used to create as
     many such objects as are necessary.
