@@ -32,7 +32,7 @@ it provides. The simpler form of use is to get the latest available value whenev
 necessary. A short example of how this can be done using this package in a typical python 
 application would be :
 
-    from driver2200087.driver2200087 import runner
+    from driver2200087 import runner
     
     dmm = runner.InstInterface2200087()
     dmm.connect()
@@ -53,7 +53,7 @@ application would be :
 If the application calls for continuous recording of the data, the following is likely a 
 better approach :
     
-    from driver2200087.driver2200087 import runner
+    from driver2200087 import runner
     
     dmm = runner.InstInterface2200087()
     dmm.connect()
@@ -73,16 +73,25 @@ you're probably better off with dmm.latest_point() instead.
 
 ## Installation
 
-TBD
+This package has been tested only with python 2.7.
+
+This package can be installed from pypi using pip: 
+
+    $ pip install driver2200087
+    
+Or using easy_install (python 2.7 only):
+
+    $ easy_install driver2200087
 
 ## Downloads and Documentation
 
-At present, the simplest way to obtain this package is to clone the git repository.
+The simplest way to obtain the source for this package is to clone the git repository.
 
     git clone https://github.com/chintal/2200087-Serial-Protocol.git driver2200087
     
-You should make sure that the root folder of the package is within your `PYTHONPATH`,
-as it stands within the context of your application where you want to use the package.
+You can install it as usual, with 
+
+    python setup.py install
 
 The latest version of the documentation can be found at [ReadTheDocs](http://driver2200087.readthedocs.org/en/latest/index.html).
 
