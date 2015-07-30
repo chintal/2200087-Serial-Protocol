@@ -66,16 +66,26 @@ class InstProtocol2200087(Protocol):
     This is a twisted protocol which handles serial communications with
     2200087 multimeters. This protocol exists and operates within the context
     of a twisted reactor. Applications themselves built on twisted should be
-    able to simply import this protocol (or its factory). Synchronous / non-twisted
-    applications should use the InstInterface2200087 class instead.
+    able to simply import this protocol (or its factory).
+
+    If you would like the protocol to produce datapoints in a different format,
+    this protocol should be sub-classed in order to do so. The changes necessary
+    would likely begin in this class's frame_recieved() function.
+
+    Synchronous / non-twisted applications should use the InstInterface2200087
+    class instead. The InstInterface2200087 class accepts a parameter to specify
+    which protocol factory to use, in case you intend to subclass this protocol.
 
     :param port: Port on which the device is connected. Default '/dev/ttyUSB0'.
+    :type port: str
+    :param buffer_size: Length of the point buffer in the protocol. Default 100.
+    :type buffer_size: int
 
     """
-    def __init__(self, port='/dev/ttyUSB0'):
+    def __init__(self, port='/dev/ttyUSB0', buffer_size=100):
         self._buffer = ""
         self._frame_size = 14
-        self._point_buffer_size = 100
+        self._point_buffer_size = buffer_size
         self.point_buffer = deque(maxlen=self._point_buffer_size)
         self._serial_port = port
         self._serial_transport = None
@@ -238,7 +248,7 @@ class InstFactory2200087(Factory):
     def __init__(self):
         self.instances = []
 
-    def buildProtocol(self, port):
+    def buildProtocol(self, port, buffer_size=100):
         """
         This function returns a InstProtocol2200087 instance, bound to the
         port specified by the param port.
@@ -249,9 +259,11 @@ class InstFactory2200087(Factory):
 
         :param port: Serial port identifier to which the device is connected
         :type port: str
+        :param buffer_size: Length of the point buffer in the protocol. Default 100.
+        :type buffer_size: int
 
         """
-        instance = InstProtocol2200087(port)
+        instance = InstProtocol2200087(port, buffer_size=buffer_size)
         return instance
 
 factory = InstFactory2200087()
@@ -266,8 +278,17 @@ class InstInterface2200087(object):
     For each DMM you want to connect to, instantiate this class once with the
     correct serial port string.
 
+    If you would like to use a custom protocol to interface with the device,
+    you can do so by passing in the custom protocol factory as the named
+    parameter pfactory. See the documentation of the default protocol object
+    for information on creating a custom Protocol class.
+
     :param port: Port on which the device is connected. Default '/dev/ttyUSB0'.
     :type port: str
+    :param buffer_size: Length of the point buffer in the protocol. Default 100.
+    :type buffer_size: int
+    :param pfactory: Custom protocol factory to use, if not the one implemented here.
+    :type pfactory: InstFactory2200087
 
     Your application code is expected to setup crochet before creating the
     instance. A short example :
@@ -280,9 +301,9 @@ class InstInterface2200087(object):
     >>> print dmm.latest_point()
 
     """
-    def __init__(self, port='/dev/ttyUSB0'):
+    def __init__(self, port='/dev/ttyUSB0', buffer_size=100, pfactory=factory):
         self._port = port
-        self._protocol = factory.buildProtocol(port)
+        self._protocol = pfactory.buildProtocol(port, buffer_size)
 
     @run_in_reactor
     def connect(self):

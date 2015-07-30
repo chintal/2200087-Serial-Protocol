@@ -14,13 +14,13 @@ def read(fname):
 
 setup(
     name="driver2200087",
-    version = "0.2",
-    author = "Chintalagiri Shashank",
-    author_email = "shashank@chintal.in",
-    description = "Python Package to interface with Radio Shack's 2200087 Multimeter",
-    license = "GPLv2",
-    keywords = "driver multimeter acquisition",
-    url = "https://github.com/chintal/2200087-Serial-Protocol",
+    version="0.3",
+    author="Chintalagiri Shashank",
+    author_email="shashank@chintal.in",
+    description="Python Package to interface with Radio Shack's 2200087 Multimeter",
+    license="GPLv2",
+    keywords="driver multimeter acquisition",
+    url="https://github.com/chintal/2200087-Serial-Protocol",
     packages=['driver2200087'],
     long_description=read('README.rst'),
     classifiers=[
