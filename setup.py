@@ -22,7 +22,7 @@ setup(
     keywords = "driver multimeter acquisition",
     url = "https://github.com/chintal/2200087-Serial-Protocol",
     packages=['driver2200087'],
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",

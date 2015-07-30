@@ -23,7 +23,7 @@
 """Serial Decoder for RadioShack 2200087 Multimeter
 
 This module provides functions for decoding the serial protocol of the
-RadioShack 2200087 Mulitimeter. See the included `readme.rst` for the
+RadioShack 2200087 Mulitimeter. See the included `basic.rst` for the
 protocol specifications and standalone usage instructions for the script.
 
 The documentation in this file focuses on the usage of this file as a
