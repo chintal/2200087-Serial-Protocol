@@ -63,9 +63,9 @@ better approach :
             
 Note that in this code snippet, the python interpreter is blocked by the infinite while 
 loop. This is not required by the module. As long as dmm.next_point() is called often 
-enough (10 Hz), you can use whatever mechanism to like to actually make the call. Note 
-that dmm.available **must** be checked by your application before making the call, or you
-should trap the exception that results. 
+enough (10 Hz), you can use whatever mechanism you like to actually make the call. Note 
+that dmm.data_available() **must** be checked by your application before making the call, 
+or you should trap the exception that results. 
 
 Making the call at less than this frequency will cause data points to be lost when the 
 point buffer fills up - if your application only calls for the occasional measurement, 
