@@ -30,7 +30,6 @@ See the 'main' section of this file for a minimal example of it's usage.
 
 
 from collections import deque
-from copy import copy
 
 from twisted.internet.protocol import Protocol
 from twisted.internet.protocol import Factory
