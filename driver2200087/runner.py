@@ -30,6 +30,7 @@ See the 'main' section of this file for a minimal example of it's usage.
 
 
 from collections import deque
+from copy import copy
 
 from twisted.internet.protocol import Protocol
 from twisted.internet.protocol import Factory
@@ -87,10 +88,14 @@ class InstProtocol2200087(Protocol):
         self._buffer = ""
         self._frame_size = 14
         self._point_buffer_size = buffer_size
-        self.point_buffer = deque(maxlen=self._point_buffer_size)
+        self.point_buffer = None
+        self.reset_buffer()
         self._serial_port = port
         self._serial_transport = None
         self._frame_processor = process_chunk
+
+    def reset_buffer(self):
+        self.point_buffer = deque(maxlen=self._point_buffer_size)
 
     def make_serial_connection(self):
         """
@@ -217,6 +222,28 @@ class InstProtocol2200087(Protocol):
 
         """
         return self.point_buffer.popleft()
+
+    def next_chunk(self):
+        """
+        This function can be called to obtain a copy of the protocol's point
+        buffer with all but the latest point in protocol's point buffer. The
+        intended use of this function is to allow continuous streaming reads
+        from the DMM. Such a typical application will want to pop the elements
+        from the left of the point buffer, which is what this function does.
+
+        This function should only be called when there is data already in the
+        protocol buffer, which can be determined using data_available().
+
+        This is a twisted protocol function, and should not be called directly
+        by synchronous / non-twisted code. Instead, its counterpart in the
+        InstInterface object should be used.
+
+        :return: Copy of point_buffer with all but the latest_point
+        :rtype: type(point_buffer)
+        """
+        rval = self.point_buffer
+        self.point_buffer = deque([rval.pop()], maxlen=self._point_buffer_size)
+        return rval
 
     def data_available(self):
         """
@@ -365,6 +392,24 @@ class InstInterface2200087(object):
         return self._protocol.next_point()
 
     @wait_for(timeout=1)
+    def next_chunk(self):
+        """
+        This function can be called to obtain the next chunk of data from the
+        protocol's point buffer. The intended use of this function is to allow
+        continuous streaming reads from the DMM. Such a typical application will
+        want to pop the elements from the left of the point buffer, which is what
+        this function effectively does.
+
+        This function should only be called when there is data already in the
+        protocol buffer, which can be determined using data_available().
+
+        :return: Point buffer with all but the latest point in the point buffer
+        :rtype: str
+
+        """
+        return self._protocol.next_chunk()
+
+    @wait_for(timeout=1)
     def data_available(self):
         """
         This function can be called to read the number of data points waiting in
@@ -375,6 +420,14 @@ class InstInterface2200087(object):
 
         """
         return self._protocol.data_available()
+
+    @wait_for(timeout=1)
+    def reset_buffer(self):
+        """
+        This function can be called to reset the point buffer. This should be
+        used for starting wave acquisition.
+        """
+        return self._protocol.reset_buffer()
 
 
 if __name__ == '__main__':
