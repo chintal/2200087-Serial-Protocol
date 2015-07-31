@@ -238,7 +238,7 @@ class InstProtocol2200087(Protocol):
         InstInterface object should be used.
 
         :return: Copy of point_buffer with all but the latest_point
-        :rtype: type(point_buffer)
+        :rtype: deque
         """
         rval = self.point_buffer
         self.point_buffer = deque([rval.pop()], maxlen=self._point_buffer_size)
@@ -366,8 +366,8 @@ class InstInterface2200087(object):
 
         :param flush: Whether to flush all the older data points.
         :type flush: bool
-        :return: Latest Data Point as processed by the serialDecoder
-        :rtype: str
+        :return: Latest Data Point as processed by the protocol
+        :rtype: str or type of each datapoint
 
         """
         return self._protocol.latest_point(flush)
@@ -384,8 +384,8 @@ class InstInterface2200087(object):
         This function should only be called when there is data already in the
         protocol buffer, which can be determined using data_available().
 
-        :return: Next Data Point in the point buffer as processed by the serialDecoder
-        :rtype: str
+        :return: Next Data Point in the point buffer as processed by the protocol
+        :rtype: str or type of each datapoint
 
         """
         return self._protocol.next_point()
@@ -402,8 +402,8 @@ class InstInterface2200087(object):
         This function should only be called when there is data already in the
         protocol buffer, which can be determined using data_available().
 
-        :return: Point buffer with all but the latest point in the point buffer
-        :rtype: str
+        :return: Point buffer with all but the latest point in the protocol's point buffer
+        :rtype: deque or type of the point_buffer
 
         """
         return self._protocol.next_chunk()
