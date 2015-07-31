@@ -89,7 +89,7 @@ occasional measurement, you're probably better off with dmm.latest_point()
 instead.
 
 For an example of using the `runner` module from within a larger framework
-by subclassing the provided twisted protocol, see `the corresponding Koala module <https://github.com/chintal/koala/blob/public/koala/testing/instruments/RS2200087.py>`.
+by subclassing the provided twisted protocol, see `the corresponding Koala module <https://github.com/chintal/koala/blob/public/koala/testing/instruments/RS2200087.py>`_.
 The koala module described there, while WIP, also includes examples of parsing the
 obtained datapoint strings into usable values.
 
