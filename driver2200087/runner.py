@@ -19,10 +19,16 @@
 """
 This module provides an asynchronous backend to the RadioShack 2200087
 multimeter's PC interface. It uses crochet to provide a synchronous API
-to an underlying Twisted based implementation. While the intent of this
-script is to allow the use of the device from within a larger framework,
-the use of crochet should allow the use of this API and therefore the
-instrument in a naive python script as well.
+to an underlying Twisted based implementation.
+
+For an example of using this module from within a larger framework, see
+`the corresponding Koala module <https://github.com/chintal/koala/blob/public/koala/testing/instruments/RS2200087.py>`.
+The koala module described there, while WIP, also includes examples of
+parsing the obtained datapoint strings into usable values.
+
+While the intent of this module is to allow the use of the device from
+within a larger framework, the use of crochet should allow the use of
+this API and therefore the instrument in a naive python script as well.
 
 See the 'main' section of this file for a minimal example of it's usage.
 """
