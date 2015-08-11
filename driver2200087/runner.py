@@ -94,6 +94,9 @@ class InstProtocol2200087(Protocol):
         self._frame_processor = process_chunk
 
     def reset_buffer(self):
+        """
+        Resets the point buffer. Any data presently within it will be lost.
+        """
         self.point_buffer = deque(maxlen=self._point_buffer_size)
 
     def make_serial_connection(self):
