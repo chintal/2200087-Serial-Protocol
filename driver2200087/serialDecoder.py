@@ -36,6 +36,37 @@ import serial
 import argparse
 import sys
 
+from serial.tools import list_ports
+
+
+def detect_device_port():
+    """
+    Locate the RS2200087 multimeter using whatever information is
+    available. Specifically, look for :
+
+        - Prolific 2303 serial ports
+        - Which produce data that can be parsed by this module
+
+    As long as no other connected USB devices have a Prolific 2303
+    serial port, it should be fine. This is an insufficient test,
+    and should be avoided in favor of manually specifying the port.
+    This is especially true when other USB devices containing Prolific
+    2303 serial ports are also expected to be connected.
+
+    """
+    description = 'USB VID:PID=067b:2303'
+    manufacturer = 'Prolific Technology, Inc. PL2303 Serial Port '
+    for port in list_ports.comports():
+        if port[2] == description and port[1] == manufacturer:
+            ser = serial.Serial(port=port, baudrate=2400, bytesize=8,
+                                parity='N', stopbits=1, timeout=5,
+                                xonxoff=False, rtscts=False, dsrdtr=False)
+            if confirm_device(ser):
+                ser.close()
+                return port[0]
+            else:
+                ser.close()
+
 
 class Grapher(object):
     """
@@ -496,17 +527,16 @@ def confirm_device(ser):
         return True
 
 
-def get_serial_object(port='/dev/ttyUSB0'):
+def get_serial_object(port=None):
     """
-    Get a serial object given the port. The object is also confirmed to be for the correct
-    device by the implementation in confirm_device.
+    Get a serial object given the port.
     """
+    if port is None:
+        port = detect_device_port()
+
     ser = serial.Serial(port=port, baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
                         xonxoff=False, rtscts=False, dsrdtr=False)
-    if confirm_device(ser):
-        return ser
-    else:
-        raise Exception
+    return ser
 
 
 def main_loop(vargs):
@@ -514,8 +544,7 @@ def main_loop(vargs):
     Main loop for standalone use
     """
     if len(vargs.port) == 1:
-        ser = serial.Serial(port=vargs.port[0], baudrate=2400, bytesize=8, parity='N', stopbits=1, timeout=5,
-                            xonxoff=False, rtscts=False, dsrdtr=False)
+        ser = get_serial_object(port=vargs.port[0])
         grapher = Grapher([0])
         if vargs.csv:
             print vargs.port[0] + ','
@@ -603,7 +632,7 @@ if __name__ == '__main__':  # Allows for usage of above methods in a library
                         action="store_true")
     parser.add_argument("-p", "--port", nargs='*',
                         help="The serial port to use",
-                        default="/dev/ttyUSB0")
+                        default=None)
     parser.add_argument("-q", "--quiet",
                         help="Use this argument if you only want the numbers, not the description. ",
                         action="store_true")

@@ -1,6 +1,6 @@
-Twisted==15.2.1
-argparse==1.2.1
-crochet==1.4.0
-pyserial==2.7
-wsgiref==0.1.2
-zope.interface==4.1.2
+Twisted>=15.2.1
+argparse>=1.2.1
+crochet>=1.4.0
+pyserial>=2.7
+wsgiref>=0.1.2
+zope.interface>=4.1.2

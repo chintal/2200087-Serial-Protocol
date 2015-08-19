@@ -37,6 +37,7 @@ from twisted.internet.protocol import connectionDone
 from twisted.internet.serialport import SerialPort
 
 from serialDecoder import process_chunk
+from serialDecoder import detect_device_port
 
 from crochet import setup
 from crochet import run_in_reactor
@@ -83,7 +84,7 @@ class InstProtocol2200087(Protocol):
     :type buffer_size: int
 
     """
-    def __init__(self, port='/dev/ttyUSB0', buffer_size=100):
+    def __init__(self, port, buffer_size=100):
         self._buffer = ""
         self._frame_size = 14
         self._point_buffer_size = buffer_size
@@ -332,7 +333,9 @@ class InstInterface2200087(object):
     >>> print dmm.latest_point()
 
     """
-    def __init__(self, port='/dev/ttyUSB0', buffer_size=100, pfactory=factory):
+    def __init__(self, port=None, buffer_size=100, pfactory=factory):
+        if port is None:
+            port = detect_device_port()
         self._port = port
         self._protocol = pfactory.buildProtocol(port, buffer_size)
 
